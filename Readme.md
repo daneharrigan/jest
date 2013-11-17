@@ -3,8 +3,13 @@
 A Jest is a JSON in/out REST API written in Go. Jest only accepts
 `application/json` content types and responds with JSON only.
 
-All routes in Jest are assumed to be private
-
+* All routes in Jest require authorization unless marked as public
+* Responses are always JSON
+* Request payloads are always JSON
+* Any request with a Content-Type not `application/json` will be rejected
+* All requests that do not resolve to a route will receive a 404 response
+* Requests for OPTIONS are automatcally generated based on existing routes
+* If a status code is not specified 200 is assumed
 
 ### Example
 
