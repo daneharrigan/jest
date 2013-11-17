@@ -6,6 +6,7 @@ import (
 	"github.com/daneharrigan/jest"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"strings"
 	"testing"
 )
@@ -136,6 +137,7 @@ func TestContentTypeNoPayload(t *testing.T) {
 }
 
 func server() *httptest.Server {
+	os.Setenv("JEST_HTTPS", "false")
 	jest.Auth(handleAuthorization)
 	jest.Get("/", serveRoot)
 	jest.Get("/custom", serveCustom)

@@ -2,27 +2,30 @@ package jest
 
 import (
 	"encoding/json"
+	"github.com/kr/secureheader"
 	"net/http"
+	"os"
 	"regexp"
 	"strings"
 )
 
 var (
-	config      *http.ServeMux
+	config      *secureheader.Config
 	routes      []route
 	authorize   func(http.ResponseWriter, *http.Request) *Status
 	contentType string
 )
 
 func init() {
-	config = http.DefaultServeMux
-	config.HandleFunc("/", serveResponses)
 	contentType = "application/json"
+	config = secureheader.DefaultConfig
+	http.HandleFunc("/", serveResponses)
 }
 
 // public
 
-func Handler() *http.ServeMux {
+func Handler() *secureheader.Config {
+	config.HTTPSRedirect = os.Getenv("JEST_HTTPS") != "false"
 	return config
 }
 
@@ -100,6 +103,11 @@ func serveResponses(ow http.ResponseWriter, r *http.Request) {
 			return
 		case mOK:
 			if !m.public {
+				if authorize == nil {
+					write(w, Forbidden)
+					return
+				}
+
 				s := authorize(w, r)
 				if s != nil && (s.Code < 200 || s.Code > 299) {
 					write(w, s)
