@@ -3,10 +3,10 @@ package jest
 import "net/http"
 
 var (
-	OK		    = NewStatus(200, http.StatusText(200))
+	OK                  = NewStatus(200, http.StatusText(200))
 	Created             = NewStatus(201, http.StatusText(201))
 	NoContent           = NewStatus(204, http.StatusText(204))
-	BadRequest	    = NewStatus(400, http.StatusText(400))
+	BadRequest          = NewStatus(400, http.StatusText(400))
 	NotFound            = NewStatus(404, http.StatusText(404))
 	Forbidden           = NewStatus(403, http.StatusText(403))
 	MethodNotAllowed    = NewStatus(405, http.StatusText(405))

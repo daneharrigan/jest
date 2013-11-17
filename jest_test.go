@@ -1,13 +1,13 @@
 package jest_test
 
 import (
-	"net/http/httptest"
-	"net/http"
-	"github.com/daneharrigan/jest"
-	"testing"
 	"bufio"
-	"strings"
 	"encoding/json"
+	"github.com/daneharrigan/jest"
+	"net/http"
+	"net/http/httptest"
+	"strings"
+	"testing"
 )
 
 func TestUnauthorizedValidMethod(t *testing.T) {

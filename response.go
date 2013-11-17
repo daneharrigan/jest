@@ -3,13 +3,13 @@ package jest
 import "net/http"
 
 type response struct {
-	fn func(http.ResponseWriter, *http.Request) *Status
+	fn     func(http.ResponseWriter, *http.Request) *Status
 	public bool
 }
 
 type responseWriter struct {
-	rw http.ResponseWriter
-	written bool
+	rw            http.ResponseWriter
+	written       bool
 	writtenHeader bool
 }
 

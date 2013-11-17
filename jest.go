@@ -1,16 +1,16 @@
 package jest
 
 import (
+	"encoding/json"
 	"net/http"
 	"regexp"
-	"encoding/json"
 	"strings"
 )
 
 var (
-	config *http.ServeMux
-	routes []route
-	authorize func(http.ResponseWriter, *http.Request) *Status
+	config      *http.ServeMux
+	routes      []route
+	authorize   func(http.ResponseWriter, *http.Request) *Status
 	contentType string
 )
 
@@ -19,7 +19,6 @@ func init() {
 	config.HandleFunc("/", serveResponses)
 	contentType = "application/json"
 }
-
 
 // public
 
@@ -39,7 +38,6 @@ func Post(uri string, fn func(http.ResponseWriter, *http.Request) *Status) *resp
 	return request("POST", uri, fn)
 }
 
-
 // private
 
 func request(m, u string, fn func(http.ResponseWriter, *http.Request) *Status) *response {
@@ -52,14 +50,14 @@ func request(m, u string, fn func(http.ResponseWriter, *http.Request) *Status) *
 	}
 
 	v := "([a-zA-Z0-9_-]+)"
-	rx := regexp.MustCompile(":"+v)
+	rx := regexp.MustCompile(":" + v)
 	r := route{
-		URI: u,
+		URI:       u,
 		Responses: make(map[string]*response),
 	}
 
-	mr := regexp.MustCompile("^"+rx.ReplaceAllString(u, v)+"$")
-	pr := regexp.MustCompile("^"+rx.ReplaceAllString(u, ":"+v)+"$")
+	mr := regexp.MustCompile("^" + rx.ReplaceAllString(u, v) + "$")
+	pr := regexp.MustCompile("^" + rx.ReplaceAllString(u, ":"+v) + "$")
 
 	r.Responses[m] = rs
 	r.URIMatcher = mr
@@ -70,7 +68,7 @@ func request(m, u string, fn func(http.ResponseWriter, *http.Request) *Status) *
 }
 
 func serveResponses(ow http.ResponseWriter, r *http.Request) {
-	w := &responseWriter{ rw: ow }
+	w := &responseWriter{rw: ow}
 	w.Header().Set("Content-Type", contentType)
 
 	header := r.Header.Get("Content-Type")

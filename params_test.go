@@ -11,7 +11,7 @@ func TestParams(t *testing.T) {
 	jest.Get("/foo/:foo_id/bar/:id", serveExample)
 	r := &http.Request{
 		Method: "GET",
-		URL: &url.URL{ Path: "/foo/1/bar/example-2" },
+		URL:    &url.URL{Path: "/foo/1/bar/example-2"},
 	}
 
 	params := jest.Params(r)
