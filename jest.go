@@ -41,6 +41,18 @@ func Post(uri string, fn func(http.ResponseWriter, *http.Request) *Status) *resp
 	return request("POST", uri, fn)
 }
 
+func Put(uri string, fn func(http.ResponseWriter, *http.Request) *Status) *response {
+	return request("PUT", uri, fn)
+}
+
+func Patch(uri string, fn func(http.ResponseWriter, *http.Request) *Status) *response {
+	return request("PATCH", uri, fn)
+}
+
+func Delete(uri string, fn func(http.ResponseWriter, *http.Request) *Status) *response {
+	return request("DELETE", uri, fn)
+}
+
 // private
 
 func request(m, u string, fn func(http.ResponseWriter, *http.Request) *Status) *response {
@@ -73,6 +85,7 @@ func request(m, u string, fn func(http.ResponseWriter, *http.Request) *Status) *
 func serveResponses(ow http.ResponseWriter, r *http.Request) {
 	w := &responseWriter{rw: ow}
 	w.Header().Set("Content-Type", contentType)
+	defer r.Body.Close()
 
 	header := r.Header.Get("Content-Type")
 	if header != "" && header != contentType {

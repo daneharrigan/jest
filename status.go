@@ -11,6 +11,7 @@ var (
 	Forbidden           = NewStatus(403, http.StatusText(403))
 	MethodNotAllowed    = NewStatus(405, http.StatusText(405))
 	InternalServerError = NewStatus(500, http.StatusText(500))
+	ServiceUnavailable  = NewStatus(503, http.StatusText(503)) // set Retry-After: 90
 )
 
 type Status struct {
