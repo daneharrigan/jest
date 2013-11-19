@@ -112,7 +112,7 @@ func serveGetExamples(w http.ResponseWriter, r *http.Request) *jest.Status {
 }
 
 func serveLogin(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("text/html")
+	w.Header().Set("Content-Type", "text/html")
 	http.ServeFile(w, r, "login.html")
 }
 ```
