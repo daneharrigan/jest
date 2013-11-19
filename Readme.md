@@ -78,3 +78,41 @@ func serveGetExample(w http.ResponseWriter, r *http.Request) *jest.Status {
 	return jest.OK
 }
 ```
+
+Using jest and `net/http` together:
+
+```go
+package main
+
+import (
+	"github.com/daneharrigan/jest"
+	"net/http"
+)
+
+func main() {
+	jest.Auth(handleAuthorization)
+	jest.Get("/examples", serveGetExamples)
+
+	http.HandleFunc("/login", serveLogin)
+	http.ListenAndServe(":5000", jest.Handler())
+}
+
+func handleAuthorization(w http.ResponseWriter, r *http.Request) *jest.Status {
+	if r.Header.Get("Authorization") != "Bearer X" {
+		return jest.Forbidden
+	}
+
+	return jest.OK
+}
+
+func serveGetExamples(w http.ResponseWriter, r *http.Request) *jest.Status {
+	e := getExamples() // get many example resources
+	json.NewEncoder(w).Encode(e)
+	return jest.OK
+}
+
+func serveLogin(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("text/html")
+	http.ServeFile(w, r, "login.html")
+}
+```
