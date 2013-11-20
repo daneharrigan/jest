@@ -29,7 +29,6 @@
 //    json.NewEncoder(w).Encode(getItems())
 //    return jest.OK
 //  }
-
 package jest
 
 import (
@@ -71,24 +70,24 @@ func Auth(fn func(http.ResponseWriter, *http.Request) *Status) {
 	authorize = fn
 }
 
-func Get(uri string, fn func(http.ResponseWriter, *http.Request) *Status) *response {
-	return request("GET", uri, fn)
+func Get(uri string, f func(http.ResponseWriter, *http.Request) *Status) *response {
+	return request("GET", uri, f)
 }
 
-func Post(uri string, fn func(http.ResponseWriter, *http.Request) *Status) *response {
-	return request("POST", uri, fn)
+func Post(uri string, f func(http.ResponseWriter, *http.Request) *Status) *response {
+	return request("POST", uri, f)
 }
 
-func Put(uri string, fn func(http.ResponseWriter, *http.Request) *Status) *response {
-	return request("PUT", uri, fn)
+func Put(uri string, f func(http.ResponseWriter, *http.Request) *Status) *response {
+	return request("PUT", uri, f)
 }
 
-func Patch(uri string, fn func(http.ResponseWriter, *http.Request) *Status) *response {
-	return request("PATCH", uri, fn)
+func Patch(uri string, f func(http.ResponseWriter, *http.Request) *Status) *response {
+	return request("PATCH", uri, f)
 }
 
-func Delete(uri string, fn func(http.ResponseWriter, *http.Request) *Status) *response {
-	return request("DELETE", uri, fn)
+func Delete(uri string, f func(http.ResponseWriter, *http.Request) *Status) *response {
+	return request("DELETE", uri, f)
 }
 
 /* private */
