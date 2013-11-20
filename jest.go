@@ -1,3 +1,35 @@
+// Package jest provides a minimal wrapper to net/http for building JSON in/out
+// API's. Jest assumes all routes require authorization unless stated otherwise
+// and conveniences such as secure response headers and `OPTIONS` responses.
+// Jest also respects routes declared on net/http directly.
+//
+//  package main
+//
+//  import (
+//    "encoding/json"
+//    "github.com/daneharrigan/jest"
+//    "net/http"
+//  )
+//
+//  func main() {
+//    jest.Auth(handleAuth)
+//    jest.Get("/", serveIndex)
+//    http.ListenAndServe(":5000", jest.Handler())
+//  }
+//
+//  func handleAuth(w http.ResponseWriter, r *http.Request) *jest.Status {
+//    if loggedIn() {
+//      return jest.OK
+//    }
+//
+//    return jest.Forbidden
+//  }
+//
+//  func serveIndex(w http.ResponseWriter, r *http.Request) *jest.Status {
+//    json.NewEncoder(w).Encode(getItems())
+//    return jest.OK
+//  }
+
 package jest
 
 import (
@@ -22,13 +54,19 @@ func init() {
 	http.HandleFunc("/", serveResponses)
 }
 
-// public
+/* public */
 
+// Handler returns an http handler for http.ListenAndServe. The handler is
+// provided by github.com/kr/secureheader and decorates HTTP response with
+// a series of secure header information.
 func Handler() *secureheader.Config {
 	config.HTTPSRedirect = os.Getenv("JEST_HTTPS") != "false"
 	return config
 }
 
+// Auth accepts a method for granting/denying access to protected routes.
+// Returning a jest.Status struct is used to determine whether authorization
+// should be allowed or denied.
 func Auth(fn func(http.ResponseWriter, *http.Request) *Status) {
 	authorize = fn
 }
@@ -53,7 +91,7 @@ func Delete(uri string, fn func(http.ResponseWriter, *http.Request) *Status) *re
 	return request("DELETE", uri, fn)
 }
 
-// private
+/* private */
 
 func request(m, u string, fn func(http.ResponseWriter, *http.Request) *Status) *response {
 	rs := &response{fn: fn}
