@@ -1,4 +1,4 @@
-# jest
+# jest [![Build Status](https://travis-ci.org/daneharrigan/jest.png?branch=master)](https://travis-ci.org/daneharrigan/jest)
 
 A Jest is a JSON in/out REST API written in Go. Jest only accepts
 `application/json` content types and responds with JSON only.
