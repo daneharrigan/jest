@@ -59,7 +59,12 @@ func init() {
 // provided by github.com/kr/secureheader and decorates HTTP response with
 // a series of secure header information.
 func Handler() *secureheader.Config {
-	config.HTTPSRedirect = os.Getenv("JEST_HTTPS") != "false"
+	https := os.Getenv("HTTPS")
+	if https == "" {
+		https = os.Getenv("JEST_HTTPS")
+	}
+
+	config.HTTPSRedirect = https != "false"
 	return config
 }
 
