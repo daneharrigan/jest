@@ -125,8 +125,12 @@ func request(m, u string, fn func(http.ResponseWriter, *http.Request) *Status) *
 }
 
 func serveResponses(ow http.ResponseWriter, r *http.Request) {
+	headers := "Authorization, Accept, Range, Content-Type, Host, Origin"
 	w := &responseWriter{rw: ow}
 	w.Header().Set("Content-Type", contentType)
+	w.Header().Set("Access-Control-Allow-Origin", r.Header.Get("Origin"))
+	w.Header().Set("Access-Control-Allow-Headers", headers)
+
 	defer r.Body.Close()
 
 	header := r.Header.Get("Content-Type")
