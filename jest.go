@@ -133,10 +133,12 @@ func serveResponses(ow http.ResponseWriter, r *http.Request) {
 
 	defer r.Body.Close()
 
-	header := r.Header.Get("Content-Type")
-	if header != "" && header != contentType {
-		write(w, BadRequest)
-		return
+	if header := r.Header.Get("Content-Type"); header != "" {
+		size := len(contentType)
+		if len(header) < size || header[:size] != contentType {
+			write(w, BadRequest)
+			return
+		}
 	}
 
 	for _, route := range routes {
