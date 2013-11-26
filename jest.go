@@ -106,7 +106,7 @@ func request(m, u string, fn func(http.ResponseWriter, *http.Request) *Status) *
 		}
 	}
 
-	v := "([a-zA-Z0-9_-]+)"
+	v := `([^/]*)`
 	rx := regexp.MustCompile(":" + v)
 	r := route{
 		URI:       u,
