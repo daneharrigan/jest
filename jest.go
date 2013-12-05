@@ -158,9 +158,11 @@ func serveResponses(ow http.ResponseWriter, r *http.Request) {
 			}
 
 			methods = append(methods, "OPTIONS")
+			allowed := strings.Join(methods, ", ")
 
 			w.Header().Set("Content-Length", "0")
-			w.Header().Set("Allow", strings.Join(methods, ", "))
+			w.Header().Set("Allow", allowed)
+			w.Header().Set("Access-Control-Allow-Methods", allowed)
 			return
 		case mOK:
 			if !m.public {
