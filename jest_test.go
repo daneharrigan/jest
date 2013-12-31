@@ -136,12 +136,24 @@ func TestContentTypeNoPayload(t *testing.T) {
 	assertEqualBody(t, r, `{"Code":400,"Message":"Bad Request"}`)
 }
 
+func TestPanicRecovery(t *testing.T) {
+	s := server()
+	defer s.Close()
+
+	r, err := auth("GET", s.URL+"/panic")
+	assertErrNil(t, err)
+	assertStatus(t, r, 500)
+	assertHeader(t, r, "Content-Type", "application/json")
+	assertEqualBody(t, r, `{"Code":500,"Message":"Internal Server Error"}`)
+}
+
 func server() *httptest.Server {
 	os.Setenv("JEST_HTTPS", "false")
 	jest.Auth(handleAuthorization)
 	jest.Get("/", serveRoot)
 	jest.Get("/custom", serveCustom)
 	jest.Get("/public", serveCustom).Public()
+	jest.Get("/panic", servePanic)
 	return httptest.NewServer(jest.Handler())
 }
 
@@ -160,6 +172,11 @@ func serveCustom(w http.ResponseWriter, r *http.Request) *jest.Status {
 
 	json.NewEncoder(w).Encode(s)
 	return jest.OK
+}
+
+func servePanic(w http.ResponseWriter, r *http.Request) *jest.Status {
+	panic("boom")
+	return nil
 }
 
 func handleAuthorization(w http.ResponseWriter, r *http.Request) *jest.Status {

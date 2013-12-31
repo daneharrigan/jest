@@ -178,12 +178,19 @@ func serveResponses(ow http.ResponseWriter, r *http.Request) {
 				}
 			}
 
+			defer internalError(w)
 			write(w, m.fn(w, r))
 			return
 		}
 	}
 
 	write(w, NotFound)
+}
+
+func internalError(w *responseWriter) {
+	if recover() != nil {
+		write(w, InternalServerError)
+	}
 }
 
 func write(w *responseWriter, s *Status) {
