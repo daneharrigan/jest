@@ -2,6 +2,9 @@ package jest
 
 import "net/http"
 
+// Params accepts the *http.Request and parses parameters found in the URL. A
+// map is returned where the keys are parameter names and the values are the
+// values found in the URL.
 func Params(r *http.Request) map[string]string {
 	params := make(map[string]string)
 

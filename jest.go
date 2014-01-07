@@ -4,6 +4,27 @@
 // use of SSL are offered via jest.Handler(). The Jest package plays nicely with
 // `net/http` so routes can be delcared with both and served as a single app.
 //
+// URI's passed to the `Get`, `Post`, `Patch`, `Put` and `Delete` methods
+// support variables:
+//
+//  package main
+//
+//  import (
+//  	"github.com/daneharrigan/jest"
+//	"net/http"
+//  )
+//
+//  func main() {
+//  	jest.Get("/resource/:id", handleGetResource)
+//	http.ListenAndServe(":5000", jest.Handler())
+//  }
+//
+//  func handleGetResource(w http.ResponseWriter, r *http.Request) *jest.Status {
+//  	params := jest.Params(r)
+//	// => map[string]string
+//	// params["id"] = "<value-of-id>"
+//  }
+//
 // JSON API's that offer OAuth logins can be handled with a mix of Jest routes
 // and standard `net/http` routes. Below is an example:
 //
