@@ -13,6 +13,8 @@ type responseWriter struct {
 	writtenHeader bool
 }
 
+// Public disables authentication on an endpoint
+// Eg: `jest.Get("/", handleIndex).Public()`
 func (r *response) Public() {
 	r.public = true
 }

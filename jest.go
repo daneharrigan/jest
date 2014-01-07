@@ -1,34 +1,44 @@
 // Package jest provides a minimal wrapper to net/http for building JSON in/out
-// API's. Jest assumes all routes require authorization unless stated otherwise
-// and conveniences such as secure response headers and `OPTIONS` responses.
-// Jest also respects routes declared on net/http directly.
+// API's. Jest assumes all routes require authorization unless stated otherwise.
+// Conveniences such as auto-generating the `OPTIONS` resposne and enforcing the
+// use of SSL are offered via jest.Handler(). The Jest package plays nicely with
+// `net/http` so routes can be delcared with both and served as a single app.
+//
+// JSON API's that offer OAuth logins can be handled with a mix of Jest routes
+// and standard `net/http` routes. Below is an example:
 //
 //  package main
 //
 //  import (
-//    "encoding/json"
-//    "github.com/daneharrigan/jest"
-//    "net/http"
+//  	"net/http"
+//	"github.com/daneharrigan/jest"
+//	"encoding/json"
 //  )
-//
+//  
 //  func main() {
-//    jest.Auth(handleAuth)
-//    jest.Get("/", serveIndex)
-//    http.ListenAndServe(":5000", jest.Handler())
+//  	jest.Auth(handleAuth)
+//  	jest.Get("/resources", handleGetResources) // jest route
+//	http.HandleFunc("/oauth/authorize", handleOAuthAuthorize) // standard route
+//  	http.ListenAndServe(":5000", jest.Handler())
 //  }
 //
 //  func handleAuth(w http.ResponseWriter, r *http.Request) *jest.Status {
-//    if loggedIn() {
-//      return jest.OK
-//    }
-//
-//    return jest.Forbidden
+//	// determine authorization
+//	if authorized(r) {
+//		return jest.OK
+//	}
+//	return jest.Forbidden
 //  }
 //
-//  func serveIndex(w http.ResponseWriter, r *http.Request) *jest.Status {
-//    json.NewEncoder(w).Encode(getItems())
-//    return jest.OK
+//  func handleGetResources(w http.ResponseWriter, r *http.Request) *jest.Status {
+//	json.NewEncoder(w).Encode(getResources())
+//	return jest.OK
 //  }
+//
+//  func handleOAuthAuthorize(w http.ResponseWriter, r *http.Request) {
+//	// render html view
+//  }
+//
 package jest
 
 import (
@@ -75,22 +85,42 @@ func Auth(fn func(http.ResponseWriter, *http.Request) *Status) {
 	authorize = fn
 }
 
+// Get accepts a URI string and a method for handling each request. The method
+// mimics the net/http package by accepting http.ResponseWriter and
+// *http.Request. The method differs though by expecting a *jest.Status to be
+// returned.
 func Get(uri string, f func(http.ResponseWriter, *http.Request) *Status) *response {
 	return request("GET", uri, f)
 }
 
+// Post accepts a URI string and a method for handling each request. The method
+// mimics the net/http package by accepting http.ResponseWriter and
+// *http.Request. The method differs though by expecting a *jest.Status to be
+// returned.
 func Post(uri string, f func(http.ResponseWriter, *http.Request) *Status) *response {
 	return request("POST", uri, f)
 }
 
+// Put accepts a URI string and a method for handling each request. The method
+// mimics the net/http package by accepting http.ResponseWriter and
+// *http.Request. The method differs though by expecting a *jest.Status to be
+// returned.
 func Put(uri string, f func(http.ResponseWriter, *http.Request) *Status) *response {
 	return request("PUT", uri, f)
 }
 
+// Patch accepts a URI string and a method for handling each request. The method
+// mimics the net/http package by accepting http.ResponseWriter and
+// *http.Request. The method differs though by expecting a *jest.Status to be
+// returned.
 func Patch(uri string, f func(http.ResponseWriter, *http.Request) *Status) *response {
 	return request("PATCH", uri, f)
 }
 
+// Delete accepts a URI string and a method for handling each request. The method
+// mimics the net/http package by accepting http.ResponseWriter and
+// *http.Request. The method differs though by expecting a *jest.Status to be
+// returned.
 func Delete(uri string, f func(http.ResponseWriter, *http.Request) *Status) *response {
 	return request("DELETE", uri, f)
 }
