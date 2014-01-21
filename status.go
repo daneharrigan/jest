@@ -5,6 +5,7 @@ import "net/http"
 var (
 	OK                  = NewStatus(200, http.StatusText(200))
 	Created             = NewStatus(201, http.StatusText(201))
+	Conflict            = NewStatus(409, http.StatusText(409))
 	NoContent           = NewStatus(204, http.StatusText(204))
 	BadRequest          = NewStatus(400, http.StatusText(400))
 	NotFound            = NewStatus(404, http.StatusText(404))

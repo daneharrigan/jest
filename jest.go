@@ -35,7 +35,7 @@
 //	"github.com/daneharrigan/jest"
 //	"encoding/json"
 //  )
-//  
+//
 //  func main() {
 //  	jest.Auth(handleAuth)
 //  	jest.Get("/resources", handleGetResources) // jest route
