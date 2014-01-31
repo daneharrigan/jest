@@ -122,7 +122,7 @@ func TestBadRequest(t *testing.T) {
 	assertErrNil(t, err)
 	assertStatus(t, r, 400)
 	assertHeader(t, r, "Content-Type", "application/json")
-	assertEqualBody(t, r, `{"Code":400,"Message":"Bad Request"}`)
+	assertEqualBody(t, r, `{"Code":400,"Message":"Bad Request","Errors":["Invalid Content-Type"]}`)
 }
 
 func TestContentTypeNoPayload(t *testing.T) {
@@ -133,7 +133,7 @@ func TestContentTypeNoPayload(t *testing.T) {
 	assertErrNil(t, err)
 	assertStatus(t, r, 400)
 	assertHeader(t, r, "Content-Type", "application/json")
-	assertEqualBody(t, r, `{"Code":400,"Message":"Bad Request"}`)
+	assertEqualBody(t, r, `{"Code":400,"Message":"Bad Request","Errors":["Invalid Content-Type"]}`)
 }
 
 func TestPanicRecovery(t *testing.T) {

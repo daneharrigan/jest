@@ -187,7 +187,9 @@ func serveResponses(ow http.ResponseWriter, r *http.Request) {
 	if header := r.Header.Get("Content-Type"); header != "" {
 		size := len(contentType)
 		if len(header) < size || header[:size] != contentType {
-			write(w, BadRequest)
+			badRequest := &Status{Code: 400, Message: "Bad Request"}
+			badRequest.Errors = append(badRequest.Errors, "Invalid Content-Type")
+			write(w, badRequest)
 			return
 		}
 	}
