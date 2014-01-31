@@ -18,6 +18,7 @@ var (
 type Status struct {
 	Code    int
 	Message string
+	Errors []string `json:",omitempty"`
 }
 
 func NewStatus(c int, s string) *Status {
